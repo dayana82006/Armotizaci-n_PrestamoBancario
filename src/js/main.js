@@ -1,75 +1,60 @@
-import { getcards, createcard, updatecard, deletecard } from "./api.js";
-import "../components/cardComponent.js"; 
-import '../styles/main.css'; // Asegúrate de que este archivo esté importado
+document.addEventListener('DOMContentLoaded', () => {
+  const loanForm = document.querySelector('loan-form');
+  const amortizationTable = document.querySelector('amortization-table');
 
-const cardList = document.getElementById("card-list"); 
-const form = document.getElementById("card-form"); 
-const inputId = document.getElementById("card-id"); 
-const inputName = document.getElementById("card-name"); 
-const inputOrigen = document.getElementById("card-origen"); 
-// Cargar datos al inicio
-document.addEventListener("DOMContentLoaded", loadcards);
-
-async function loadcards() {
-  cardList.innerHTML = ""; 
-  try {
-    const cards = await getcards();
-    cards.forEach((card) => addcardToDOM(card)); 
-  } catch (error) {
-    console.error("Error cargando las cards:", error);
-  }
-}
-
-function addcardToDOM(card) {
-  const cardElement = document.createElement("card-component");
-  cardElement.setAttribute("data-id", card.id);
-  cardElement.setAttribute("data-name", card.name);
-  cardElement.setAttribute("data-historia", card.historia);
-  cardElement.setAttribute("data-origen", card.origen);
-
-  // Evento para editar el card
-  cardElement.addEventListener("edit-card", (e) => {
-    const { id, name, origen } = e.detail;
-    inputId.value = id; 
-    inputName.value = name; 
-    inputOrigen.value = origen; 
-    inputHistoria.value = historia; 
-  });
-
-  cardElement.addEventListener("delete-card", async (e) => {
-    const { id } = e.detail;
-    try {
-      await deletecard(id); 
-      loadcards();
-    } catch (error) {
-      console.error("Error eliminando el card:", error);
-    }
-  });
-
-  cardList.appendChild(cardElement); 
-}
-
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const card = {
-    name: inputName.value,
-    origen: inputOrigen.value,
-    historia: inputHistoria.value,
-  };
-
-  try {
-    if (inputId.value) {
-     
-      await updatecard(inputId.value, card);
+  loanForm.addEventListener('formSubmitted', (event) => {
+    const formData = event.detail;
+    const { loanAmount, interestRate, loanTerm, amortizationType } = formData;
+    
+    let tableData;
+    if (amortizationType === 'frances') {
+      tableData = calculateFrances(loanAmount, interestRate, loanTerm);
     } else {
-      
-      await createcard(card);
+      tableData = calculateAmericano(loanAmount, interestRate, loanTerm);
     }
 
-    form.reset(); 
-    loadcards(); 
-  } catch (error) {
-    console.error("Error guardando el card:", error);
-  }
+    amortizationTable.renderTable(tableData);
+  });
 });
+
+function calculateFrances(loanAmount, interestRate, loanTerm) {
+  let table = [];
+  const monthlyRate = interestRate / 12;
+  const fixedMonthlyPayment = loanAmount * (monthlyRate * Math.pow(1 + monthlyRate, loanTerm)) / (Math.pow(1 + monthlyRate, loanTerm) - 1);
+  let balance = loanAmount;
+
+  for (let i = 1; i <= loanTerm; i++) {
+    const interest = balance * monthlyRate;
+    const principal = fixedMonthlyPayment - interest;
+    balance -= principal;
+    table.push({
+      month: i,
+      initialBalance: balance + principal,
+      monthlyPayment: fixedMonthlyPayment.toFixed(2),
+      interest: interest.toFixed(2),
+      principal: principal.toFixed(2),
+      remainingBalance: balance.toFixed(2)
+    });
+  }
+
+  return table;
+}
+
+function calculateAmericano(loanAmount, interestRate, loanTerm) {
+  let table = [];
+  const monthlyRate = interestRate / 12;
+  const interestPayment = loanAmount * monthlyRate;
+
+  for (let i = 1; i <= loanTerm; i++) {
+    table.push({
+      month: i,
+      initialBalance: loanAmount,
+      monthlyPayment: interestPayment.toFixed(2),
+      interest: interestPayment.toFixed(2),
+      principal: i === loanTerm ? loanAmount.toFixed(2) : '0.00',
+      remainingBalance: i === loanTerm ? '0.00' : loanAmount.toFixed(2)
+    });
+  }
+
+  return table;
+}

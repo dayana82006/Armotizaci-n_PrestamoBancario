@@ -3,114 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CRUD con JSON Server y Web Components</title>
+  <title>Calculadora de Amortización de Préstamos</title>
   <link rel="stylesheet" href="./src/styles/main.css">
+
+  <script src="./src/components/ArmotizacionTable.js" defer></script>
+  <script src="./src/components/itemComponent.js" defer></script>
+  <script src="./src/components/LoanForm.js" defer></script>
+  <script type="module" src="./src/js/main.js "></script>
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-100">
 
-  <!-- Menú de Navegación -->
-  <nav class="bg-blue-600 p-4">
-      <div class="max-w-7xl mx-auto flex justify-between items-center">
-          <div class="text-white font-semibold text-2xl">Préstamo Bancario</div>
-          <div class="space-x-4">
-              <a href="#generar" class="text-white hover:bg-blue-500 p-2 rounded-md">Generar Tabla</a>
-              <a href="#consultar" class="text-white hover:bg-blue-500 p-2 rounded-md">Consultar Cálculos</a>
-              <a href="#contacto" class="text-white hover:bg-blue-500 p-2 rounded-md">Contacto</a>
-          </div>
-      </div>
-  </nav>
+  <!-- Contenedor Principal -->
+  <div class="container my-5">
 
-  <!-- Sección Principal -->
-  <main class="py-10">
-      <div class="max-w-7xl mx-auto px-4">
-          <h2 class="text-3xl font-semibold text-center text-gray-800">Genera y Consulta tu Tabla de Amortización</h2>
+    <amortization-table></amortization-table>
+  </div>
 
-          <!-- Secciones con IDs para navegación -->
-          <section id="generar" class="my-10 bg-white p-6 rounded-lg shadow-md">
-              <h3 class="text-2xl font-semibold mb-4">Generar Tabla de Amortización</h3>
-              <form class="space-y-4">
-                  <div>
-                      <label for="monto" class="block text-sm font-medium text-gray-700">Monto del Préstamo</label>
-                      <input type="number" id="monto" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" placeholder="Ej. 5000">
-                  </div>
-                  <div>
-                      <label for="interes" class="block text-sm font-medium text-gray-700">Tasa de Interés Anual (%)</label>
-                      <input type="number" id="interes" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" placeholder="Ej. 5">
-                  </div>
-                  <div>
-                      <label for="plazo" class="block text-sm font-medium text-gray-700">Plazo del Préstamo (años)</label>
-                      <input type="number" id="plazo" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" placeholder="Ej. 5">
-                  </div>
-                  <div class="flex justify-center">
-                      <button type="submit" class="mt-4 bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-500">Generar</button>
-                  </div>
-              </form>
-          </section>
-
-          <section id="consultar" class="my-10 bg-white p-6 rounded-lg shadow-md">
-              <h3 class="text-2xl font-semibold mb-4">Consultar Cálculos Anteriores</h3>
-              <p class="text-gray-600">Aquí puedes ver los cálculos anteriores guardados. Se mostrará la lista de tablas de amortización generadas por el usuario.</p>
-              <!-- Aquí podrás mostrar los cálculos previos -->
-              <ul id="tabla-amortizacion" class="space-y-4 mt-6">
-                  <!-- Aquí se añadirán los resultados usando JavaScript -->
-              </ul>
-          </section>
-
-          <section id="contacto" class="my-10 bg-white p-6 rounded-lg shadow-md">
-              <h3 class="text-2xl font-semibold mb-4">Contacto</h3>
-              <p class="text-gray-600">Si tienes alguna pregunta, no dudes en contactarnos.</p>
-          </section>
-      </div>
-  </main>
-
-  <!-- Script para manejar la interacción -->
-  <script>
-      // Obtener los elementos del formulario y la lista
-      const form = document.querySelector('form');
-      const montoInput = document.getElementById('monto');
-      const interesInput = document.getElementById('interes');
-      const plazoInput = document.getElementById('plazo');
-      const tablaAmortizacionList = document.getElementById('tabla-amortizacion');
-
-      // Manejar el envío del formulario
-      form.addEventListener('submit', function(e) {
-          e.preventDefault();
-
-          // Obtener los valores de los inputs
-          const monto = parseFloat(montoInput.value);
-          const interes = parseFloat(interesInput.value);
-          const plazo = parseInt(plazoInput.value);
-
-          // Lógica de cálculo de la tabla de amortización
-          const tasaMensual = (interes / 100) / 12;
-          const numPagos = plazo * 12;
-          const pagoMensual = (monto * tasaMensual) / (1 - Math.pow(1 + tasaMensual, -numPagos));
-          const tabla = [];
-
-          let saldo = monto;
-          for (let i = 1; i <= numPagos; i++) {
-              const interesPago = saldo * tasaMensual;
-              const principalPago = pagoMensual - interesPago;
-              saldo -= principalPago;
-
-              tabla.push({
-                  mes: i,
-                  pago: pagoMensual.toFixed(2),
-                  interes: interesPago.toFixed(2),
-                  principal: principalPago.toFixed(2),
-                  saldo: saldo.toFixed(2)
-              });
-          }
-
-          // Mostrar la tabla de amortización
-          tablaAmortizacionList.innerHTML = '';
-          tabla.forEach(fila => {
-              const li = document.createElement('li');
-              li.classList.add('border-b', 'pb-4', 'text-sm');
-              li.innerHTML = `Mes ${fila.mes}: Pago: $${fila.pago}, Interés: $${fila.interes}, Principal: $${fila.principal}, Saldo: $${fila.saldo}`;
-              tablaAmortizacionList.appendChild(li);
-          });
-      });
-  </script>
 </body>
 </html>

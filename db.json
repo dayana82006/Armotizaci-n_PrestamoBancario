@@ -1,14 +1,166 @@
 {
-  "items": [
+  "clientes": [
     {
-      "id": "1",
-      "name": "Item 1",
-      "description": "Descripción del Item 1"
+      "id": 1,
+      "nombre": "Juan Pérez",
+      "documento": "12345678"
     },
     {
-      "id": "2",
-      "name": "Item 2",
-      "description": "Descripción del Item 2"
+      "id": "22de",
+      "name": "ss",
+      "document": "1105463906"
+    }
+  ],
+  "prestamos": [
+    {
+      "id": 1,
+      "clienteId": 1,
+      "monto": 5000,
+      "interes": 5,
+      "plazo": 12,
+      "tipoAmortizacion": "Francés",
+      "tablaAmortizacion": [
+        {
+          "numeroCuota": 1,
+          "saldoInicial": 5000,
+          "cuotaMensual": 500,
+          "intereses": 250,
+          "amortizacionCapital": 250,
+          "saldoRestante": 4750
+        },
+        {
+          "numeroCuota": 2,
+          "saldoInicial": 4750,
+          "cuotaMensual": 500,
+          "intereses": 237.5,
+          "amortizacionCapital": 262.5,
+          "saldoRestante": 4487.5
+        }
+      ]
+    },
+    {
+      "id": "aebd",
+      "clienteId": 1,
+      "monto": 1000,
+      "interes": 5,
+      "plazo": 12,
+      "tipoAmortizacion": "Francés",
+      "tablaAmortizacion": []
+    },
+    {
+      "id": "8694",
+      "clienteId": 1,
+      "monto": 1000,
+      "interes": 5,
+      "plazo": 12,
+      "tipoAmortizacion": "Francés",
+      "tablaAmortizacion": []
+    },
+    {
+      "id": "4d8e",
+      "clientId": "22de",
+      "loanAmount": 200000,
+      "interestRate": 12,
+      "loanTerm": 12,
+      "amortizationType": "frances",
+      "tableData": [
+        {
+          "month": 1,
+          "initialBalance": 200000,
+          "monthlyPayment": "17769.76",
+          "interest": "2000.00",
+          "principal": "15769.76",
+          "remainingBalance": "184230.24"
+        },
+        {
+          "month": 2,
+          "initialBalance": 184230.24226433167,
+          "monthlyPayment": "17769.76",
+          "interest": "1842.30",
+          "principal": "15927.46",
+          "remainingBalance": "168302.79"
+        },
+        {
+          "month": 3,
+          "initialBalance": 168302.78695130665,
+          "monthlyPayment": "17769.76",
+          "interest": "1683.03",
+          "principal": "16086.73",
+          "remainingBalance": "152216.06"
+        },
+        {
+          "month": 4,
+          "initialBalance": 152216.05708515138,
+          "monthlyPayment": "17769.76",
+          "interest": "1522.16",
+          "principal": "16247.60",
+          "remainingBalance": "135968.46"
+        },
+        {
+          "month": 5,
+          "initialBalance": 135968.45992033457,
+          "monthlyPayment": "17769.76",
+          "interest": "1359.68",
+          "principal": "16410.07",
+          "remainingBalance": "119558.39"
+        },
+        {
+          "month": 6,
+          "initialBalance": 119558.38678386959,
+          "monthlyPayment": "17769.76",
+          "interest": "1195.58",
+          "principal": "16574.17",
+          "remainingBalance": "102984.21"
+        },
+        {
+          "month": 7,
+          "initialBalance": 102984.21291603995,
+          "monthlyPayment": "17769.76",
+          "interest": "1029.84",
+          "principal": "16739.92",
+          "remainingBalance": "86244.30"
+        },
+        {
+          "month": 8,
+          "initialBalance": 86244.29730953203,
+          "monthlyPayment": "17769.76",
+          "interest": "862.44",
+          "principal": "16907.31",
+          "remainingBalance": "69336.98"
+        },
+        {
+          "month": 9,
+          "initialBalance": 69336.98254695901,
+          "monthlyPayment": "17769.76",
+          "interest": "693.37",
+          "principal": "17076.39",
+          "remainingBalance": "52260.59"
+        },
+        {
+          "month": 10,
+          "initialBalance": 52260.594636760274,
+          "monthlyPayment": "17769.76",
+          "interest": "522.61",
+          "principal": "17247.15",
+          "remainingBalance": "35013.44"
+        },
+        {
+          "month": 11,
+          "initialBalance": 35013.44284745955,
+          "monthlyPayment": "17769.76",
+          "interest": "350.13",
+          "principal": "17419.62",
+          "remainingBalance": "17593.82"
+        },
+        {
+          "month": 12,
+          "initialBalance": 17593.81954026581,
+          "monthlyPayment": "17769.76",
+          "interest": "175.94",
+          "principal": "17593.82",
+          "remainingBalance": "0.00"
+        }
+      ]
     }
   ]
 }
